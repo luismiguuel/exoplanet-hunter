@@ -25,3 +25,40 @@ python -m venv .venv
 ```
 
 As versões das bibliotecas usadas nesta entrega estão fixadas em [requirements.txt](requirements.txt).
+
+## Entrega 2 — pré-processamento
+
+O notebook [notebooks/02_preprocessing.ipynb](notebooks/02_preprocessing.ipynb)
+compara 24 combinações de imputação, escala e redução com kNN fixo (`k=7`,
+distância euclidiana, pesos uniformes). Utiliza o mesmo snapshot e as 12
+grandezas da Entrega 1. As cinco divisões de `StratifiedGroupKFold` usam
+`kepid` como grupo e semente 42; todas as transformações são ajustadas
+somente no treino de cada fold. A menção a 10 folds na EDA não altera o
+protocolo de cinco folds exigido nesta entrega.
+
+Depois de instalar as dependências acima, selecione o kernel `.venv` e
+execute todas as células na ordem. O notebook funciona a partir da raiz
+do repositório ou de `notebooks/`; não baixa outra versão dos dados.
+As funções de construção e execução ficam em `src/pipelines.py` e
+`src/experiments.py`, enquanto a explicação acadêmica permanece no notebook.
+
+Os resultados são salvos em `results/`:
+
+- `preprocessing_folds.csv`: 120 registros, métricas, dimensões, tempo,
+  estado, avisos e erros por combinação/fold.
+- `preprocessing_summary.csv`: 24 combinações; médias e desvios amostrais
+  somente para execuções com cinco folds válidos.
+- `preprocessing_fold_scheme.csv` e `preprocessing_fold_assignments.csv`:
+  diagnóstico de classes/grupos e associação exata dos objetos ao teste.
+- `preprocessing_baseline_comparison.csv`: diferenças e empates em relação
+  ao baseline para todas as métricas.
+- `preprocessing_paired_effects.csv`: efeitos com as demais opções e folds
+  mantidos iguais.
+- `preprocessing_metadata.json`: versões efetivas, hashes e parâmetros.
+
+O baseline usa mediana, sem escala e sem redução. Diferenças menores que o
+maior desvio entre duas configurações são interpretadas como empate
+descritivo, sem teste formal de significância. Tempos incluem ajuste,
+previsões, métricas e registro das dimensões, com uma thread numérica.
+Uma nova execução substitui somente os arquivos de resultados desta entrega;
+a EDA e o CSV congelado são preservados.
